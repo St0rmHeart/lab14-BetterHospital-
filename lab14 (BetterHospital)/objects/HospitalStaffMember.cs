@@ -1,6 +1,6 @@
 ﻿namespace lab14__BetterHospital_
 {
-    public abstract class HospitalStuffMember : Agent
+    public abstract class HospitalStaffMember : Agent
     {
         public Hospital Hospital { get; set; }
         public int Productivity { get; set; }
@@ -9,7 +9,7 @@
 
         public abstract void StartService();
         public abstract void EndService();
-        public abstract int CalculateServiceLenth();
+        public abstract int CalculateServiceLength();
 
     }
 }

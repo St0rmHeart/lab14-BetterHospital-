@@ -1,6 +1,6 @@
 namespace lab14__BetterHospital_
 {
-    public class RegistryStaffMember : HospitalStuffMember
+    public class RegistryStaffMember : HospitalStaffMember
     {
         public override void StartService()
         {
@@ -10,7 +10,7 @@ namespace lab14__BetterHospital_
                 IsFree = false;
                 Patient = Hospital.RegistryQueue[0];
                 Hospital.RegistryQueue.RemoveAt(0);
-                TimeOfNextEvent = Program.CurrentTime + CalculateServiceLenth();
+                TimeOfNextEvent = Program.CurrentTime + CalculateServiceLength();
             }
             else
             { 
@@ -31,7 +31,7 @@ namespace lab14__BetterHospital_
             StartService();
         }
 
-        public override int CalculateServiceLenth()
+        public override int CalculateServiceLength()
         {
             throw new NotImplementedException();
         }
