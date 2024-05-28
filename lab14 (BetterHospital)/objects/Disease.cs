@@ -2,22 +2,38 @@ namespace lab14__BetterHospital_
 {
 	public class Disease
 	{
-		public DiseaseName DiseaseName { get; set; }
+        public Villager Owner { get; set; }
+        public EDiseaseName DiseaseName { get; set; }
 
-		public int Severity { get; set; }
-
-		public int UntilNextRequest { get; set; }
-
-		public Disease()
+        private int _severity;
+		public int Severity
         {
-            DiseaseName = RandomDiseaseName();
-            Severity = new Random().Next(1, 3);
+            get
+            { 
+                return _severity;
+            }
+            set
+            {
+                if (value > 0)
+                {
+                    DateOfNextRequest = Program.CurrentTime + Program.Random.Next(30, 61) / value;
+                    Owner.TimeOfNextEvent = DateOfNextRequest;
+                }
+                _severity = value;
+            } 
+        }
+		public int DateOfNextRequest { get; private set; }
+
+		public Disease(EDiseaseName diseaseName, Villager owner)
+        {
+            Owner = owner;
+            DiseaseName = diseaseName;
         }
 
-        public DiseaseName RandomDiseaseName()
+        public EDiseaseName RandomDiseaseName()
         {
             Random rnd = new Random();
-            return (DiseaseName)rnd.Next(3);
+            return (EDiseaseName)rnd.Next(3);
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿namespace lab14__BetterHospital_
 {
-    public enum DiseaseName
+    public enum EDiseaseName
     {
         Fever,
-        BoneFracture,
         Covid,
-        Tumor
+        Tumor,
+        BoneFracture
     }
-    public enum HealthStatus
+    public enum EHealthStatus
     {
         Healthy,
         UnknownDisease,

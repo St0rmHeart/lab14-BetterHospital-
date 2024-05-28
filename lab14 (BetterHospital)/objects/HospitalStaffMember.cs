@@ -2,8 +2,13 @@
 {
     public abstract class HospitalStaffMember : Agent
     {
+        public HospitalStaffMember(Hospital hospital) : base()
+        {
+            Hospital = hospital;
+            IsFree = true;
+        }   
         public Hospital Hospital { get; set; }
-        public int Productivity { get; set; }
+        public int Productivity { get; } = Program.Random.Next(5);
         protected Villager Patient { get; set; }
         public bool IsFree { get; set; }
 

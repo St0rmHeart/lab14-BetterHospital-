@@ -2,6 +2,9 @@ namespace lab14__BetterHospital_
 {
     public class RegistryStaffMember : HospitalStaffMember
     {
+        public RegistryStaffMember(Hospital hospital) : base(hospital)
+        {
+        }
         public override void StartService()
         {
             //1. подозвать персого из очереди пациента
@@ -12,32 +15,44 @@ namespace lab14__BetterHospital_
                 Hospital.RegistryQueue.RemoveAt(0);
                 TimeOfNextEvent = Program.CurrentTime + CalculateServiceLength();
             }
-            else
-            { 
-                IsFree = true;
-            }
         }
         public override void EndService()
         {
-            //1.Направить пациента в нужную очередь
-            if(Patient.Disease?.DiseaseName == DiseaseName.BoneFracture)
-            {
-                Hospital.SurgeonQueue.Add(Patient);
-            }
-            else
-            {
-                Hospital.TherapistQueue.Add(Patient);
-            }
+            Patient = null;
+            IsFree = true;
             StartService();
         }
 
         public override int CalculateServiceLength()
         {
-            throw new NotImplementedException();
+            return new Random().Next(5, 8) - Productivity;
         }
 
         public override void ExecuteAction()
         {
+            switch (Patient.HealthStatus)
+            {
+                case EHealthStatus.UnknownDisease:
+                    Hospital.AddToTherapistQueue(Patient);
+                    break;
+                case EHealthStatus.OnTreatment:
+                    switch (Patient.Disease.DiseaseName)
+                    {
+                        case EDiseaseName.Fever:
+                        case EDiseaseName.Covid:
+                            Hospital.AddToTherapistQueue(Patient);
+                            break;
+                        case EDiseaseName.BoneFracture:
+                        case EDiseaseName.Tumor:
+                            Hospital.AddToSurgeonQueue(Patient);
+                            break;
+                        default:
+                            throw new Exception();
+                    }
+                    break;
+                default:
+                    throw new Exception();
+            }
             EndService();
         }
     }

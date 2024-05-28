@@ -2,45 +2,55 @@
 {
     public class Surgeon : HospitalStaffMember
     {
+        public Surgeon(Hospital hospital) : base(hospital) { } 
         public override void StartService()
         {
-            //1. подозвать персого из очереди пациента
-            if (Hospital.RegistryQueue.Count != 0)
+            // ПОДОЗВАТЬ ПЕРСОВ
+            if (Hospital.SurgeonQueue.Count != 0)
             {
                 IsFree = false;
                 Patient = Hospital.SurgeonQueue[0];
                 Hospital.SurgeonQueue.RemoveAt(0);
                 TimeOfNextEvent = Program.CurrentTime + CalculateServiceLength();
             }
-            else
-            {
-                IsFree = true;
-            }
         }
         public override void EndService()
         {
-            //1.Направить пациента в нужную очередь
-            if (Patient.Disease?.DiseaseName == DiseaseName.Tumor) //вырезали опухоль и катись отсюда
-            {
-                Patient.HealthStatus = HealthStatus.Healthy;
-                Patient.Disease = null;
-                Patient = null;
-            }
-            else //если ковид или лихорадка - его надо пролечить и выпнуть из больницы на N тиков
-            {
-                Patient.Disease.Severity--;
-                Hospital.TherapistQueue.Add(Patient);
-            }
             StartService();
         }
 
         public override int CalculateServiceLength()
         {
-            return new Random().Next(10);
+            var lenth = Program.Random.Next(1, 15) - Productivity * 2;
+            if (Patient.Disease.DiseaseName == EDiseaseName.Tumor)
+            {
+                //проводим операцию
+                lenth += 7 * Patient.Disease.Severity;
+            }
+            return lenth;
         }
 
         public override void ExecuteAction()
         {
+            //Направить пациента в нужную очередь
+            switch (Patient.Disease.DiseaseName)
+            {
+                case EDiseaseName.Tumor:
+                    Patient.Recover();
+                    break;
+                case EDiseaseName.BoneFracture:
+                    if (Patient.Disease.Severity > 0)
+                    {
+                        Patient.Disease.Severity = Patient.Disease.Severity - 1;
+                    }
+                    if (Patient.Disease.Severity == 0)
+                    {
+                        Patient.Recover();
+                    }
+                    break;
+                default:
+                    throw new Exception();
+            }
             EndService();
         }
     }
