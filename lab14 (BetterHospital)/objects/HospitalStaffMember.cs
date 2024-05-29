@@ -17,5 +17,9 @@
         public abstract void EndService();
         public abstract int CalculateServiceLength();
 
+        public int GetPatientID()
+        {
+            return Patient.AgentID;
+        }
     }
 }

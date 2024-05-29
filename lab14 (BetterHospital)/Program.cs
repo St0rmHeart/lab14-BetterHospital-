@@ -2,6 +2,7 @@ namespace lab14__BetterHospital_
 {
     public static class Program
     {
+        
         public static Random Random { get; set; } = new();
         public static int CurrentTime { get; set; } = 0;
         public static List<Agent> Agents { get; set; } = [];
@@ -35,17 +36,11 @@ namespace lab14__BetterHospital_
 
 
         static void Main()
-        {
-            
-
-            for (int i = 0; i < 100; i++)
-            {
-                Tick();
-            }
-
+        {            
 
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Form1 form1 = new Form1();
+            Application.Run(form1);
         }
     }
 }
