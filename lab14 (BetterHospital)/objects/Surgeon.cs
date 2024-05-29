@@ -16,6 +16,8 @@
         }
         public override void EndService()
         {
+            Patient = null;
+            IsFree = true;
             StartService();
         }
 

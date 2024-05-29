@@ -6,6 +6,7 @@
         {
             Hospital = hospital;
             IsFree = true;
+            SetID();
         }   
         public Hospital Hospital { get; set; }
         public int Productivity { get; } = Program.Random.Next(5);

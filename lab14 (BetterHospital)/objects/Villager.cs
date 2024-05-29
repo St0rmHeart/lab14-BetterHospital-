@@ -20,6 +20,7 @@ namespace lab14__BetterHospital_
 			Immunity = new Random().Next(10);
 			Disease = null;
 			HealthStatus = EHealthStatus.Healthy;
+			SetID();
 		}
 		public void Recover()
 		{
