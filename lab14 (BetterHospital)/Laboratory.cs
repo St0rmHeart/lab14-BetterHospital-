@@ -6,7 +6,7 @@ namespace lab14__BetterHospital_
     {
         //событие передаёт True если начат приём, False если окончен приём
         delegate void InLaboratoryHandler(bool startOrEnd);
-        event InLaboratoryHandler Notify;
+        event InLaboratoryHandler? Notify;
         public Laboratory(Hospital hospital)
         {
             Hospital = hospital;
@@ -19,7 +19,7 @@ namespace lab14__BetterHospital_
         {
             OnLabPatients.Add((patient, Program.CurrentTime + ServiceTime));
             TimeOfNextEvent = OnLabPatients.Min(patient => patient.AnalysisResultsDate);
-            Notify.Invoke(true);
+            Notify?.Invoke(true);
         }
 
         public override void ExecuteAction()
@@ -36,7 +36,7 @@ namespace lab14__BetterHospital_
                 }
             }
             OnLabPatients.RemoveAll(patient => patient.AnalysisResultsDate == Program.CurrentTime);
-            Notify.Invoke(false);
+            Notify?.Invoke(false);
         }
     }
 }
