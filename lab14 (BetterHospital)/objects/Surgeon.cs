@@ -2,6 +2,9 @@
 {
     public class Surgeon : HospitalStaffMember
     {
+        //событие передаёт True если начат приём, False если окончен приём
+        delegate void InSurgeonHandler(bool startOrEnd);
+        event InSurgeonHandler Notify;
         public Surgeon(Hospital hospital) : base(hospital) { } 
         public override void StartService()
         {
@@ -12,12 +15,14 @@
                 Patient = Hospital.SurgeonQueue[0];
                 Hospital.SurgeonQueue.RemoveAt(0);
                 TimeOfNextEvent = Program.CurrentTime + CalculateServiceLength();
+                Notify.Invoke(true);
             }
         }
         public override void EndService()
         {
             Patient = null;
             IsFree = true;
+            Notify.Invoke(false);
             StartService();
         }
 

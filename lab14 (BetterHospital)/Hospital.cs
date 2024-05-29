@@ -13,6 +13,14 @@
         public List<Villager> TherapistQueue { get; } = [];
         public List<Villager> SurgeonQueue { get; } = [];
 
+        //передают true когда villager'а добавляют в определённую очередь
+        delegate void RegistryQueueHandler(bool startOrEnd);
+        event RegistryQueueHandler RegistryQueueNotify;
+        delegate void TherapistQueueHandler(bool startOrEnd);
+        event TherapistQueueHandler TherapistQueueNotify;
+        delegate void SurgeonQueueHandler(bool startOrEnd);
+        event SurgeonQueueHandler SurgeonQueueNotify;
+
         public List<RegistryStaffMember> RegistryDepartment { get; } = [];
         public List<Therapist> TherapeuticDepartment { get; } = [];
         public List<Surgeon> SurgicalDepartment { get; } = [];
@@ -51,6 +59,7 @@
         public void AddToRegistryQueue(Villager villager)
         {
             RegistryQueue.Add(villager);
+            RegistryQueueNotify.Invoke(true);
             foreach (var registrator in RegistryDepartment)
             {
                 if (registrator.IsFree)
@@ -63,11 +72,12 @@
         public void AddToTherapistQueue(Villager villager)
         {
             TherapistQueue.Add(villager);
-            foreach (var therapis in TherapeuticDepartment)
+            TherapistQueueNotify.Invoke(true);
+            foreach (var therapist in TherapeuticDepartment)
             {
-                if (therapis.IsFree)
+                if (therapist.IsFree)
                 {
-                    therapis.StartService();
+                    therapist.StartService();
                     return;
                 }
             }
@@ -75,6 +85,7 @@
         public void AddToSurgeonQueue(Villager villager)
         {
             SurgeonQueue.Add(villager);
+            SurgeonQueueNotify.Invoke(true);
             foreach (var surgeon in SurgicalDepartment)
             {
                 if (surgeon.IsFree)

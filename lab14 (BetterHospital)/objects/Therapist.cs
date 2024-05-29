@@ -2,6 +2,9 @@ namespace lab14__BetterHospital_
 {
 	public class Therapist : HospitalStaffMember
     {
+        //событие передаёт True если начат приём, False если окончен приём
+        delegate void InTherapistHandler(bool startOrEnd);
+        event InTherapistHandler Notify;
         public Therapist(Hospital hospital) : base(hospital) { }
         public override void StartService()
         {
@@ -12,12 +15,14 @@ namespace lab14__BetterHospital_
                 Patient = Hospital.TherapistQueue[0];
                 Hospital.TherapistQueue.RemoveAt(0);
                 TimeOfNextEvent = Program.CurrentTime + CalculateServiceLength();
+                Notify.Invoke(true);
             }
         }
         public override void EndService()
         {
             Patient = null;
             IsFree = true;
+            Notify.Invoke(false);
             StartService();
         }
 

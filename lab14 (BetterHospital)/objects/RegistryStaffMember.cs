@@ -2,6 +2,9 @@ namespace lab14__BetterHospital_
 {
     public class RegistryStaffMember : HospitalStaffMember
     {
+        //событие передаёт True если начат приём, False если окончен приём
+        delegate void InRegistryHandler(bool startOrEnd);
+        event InRegistryHandler Notify;
         public RegistryStaffMember(Hospital hospital) : base(hospital)
         {
         }
@@ -14,12 +17,14 @@ namespace lab14__BetterHospital_
                 Patient = Hospital.RegistryQueue[0];
                 Hospital.RegistryQueue.RemoveAt(0);
                 TimeOfNextEvent = Program.CurrentTime + CalculateServiceLength();
+                Notify.Invoke(true);
             }
         }
         public override void EndService()
         {
             Patient = null;
             IsFree = true;
+            Notify.Invoke(false);
             StartService();
         }
 
